@@ -11,6 +11,7 @@ run ./Allwmake.
 To use kOmegaSSTSASnew, delta needs to be defined in
 constant/turbulenceProperties:
 
+`
 RAS
 {
     RASModel        kOmegaSSTSASnew;
@@ -26,13 +27,14 @@ RAS
         {}
     }
 }
-
+`
 ..and the user compiled libs need to be added in system/controlDict
 (choose appropriate version):
 
+`
 libs
 (
 //    "libmyincompressibleturbulenceModels.so"
     "libmycompressibleturbulenceModels.so"
 );
-
+`
