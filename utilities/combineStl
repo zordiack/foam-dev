@@ -6,7 +6,7 @@
 
 function show_help {
   echo -e "\nOptions:\n\n  -n = output name (without file extension)
-  -cfEdges = write cfMesh feature edges (.fms), requires 
+  -cfEdges = write cfMesh feature edges (.fms), requires
      angle as an argument
   -h|--help = show options
   -check = run surfaceCheck for output file\n
@@ -53,7 +53,7 @@ while [ "$#" -gt 0 ]; do
        echo -e '\nERROR: Must specify an angle argument for -cfEdges, see -h for help.\n'
        exit 1
        fi
-       ;;       
+       ;;
     -?*)
        printf 'ERROR: Unknown option: %s\n' "$1"
        exit 1
@@ -64,7 +64,7 @@ while [ "$#" -gt 0 ]; do
   shift
 done
 
-patchnumber=$(ls *.stl 2> /dev/null |wc -l) 
+patchnumber=$(ls *.stl 2> /dev/null |wc -l)
 if [ $patchnumber -eq 0 ]
 then
   echo -e "\nERROR: No .stl files found, exiting.\n"
@@ -93,12 +93,12 @@ output file has $facenumber faces and file size is $disksize."
 if [ "$cfedges" = "yes" ]
 then
   echo -e "\nRunning surfaceFeatureEdges using angle $cfangle..\n"
-  surfaceFeatureEdges -angle $cfangle $output_filename.stl $output_filename.ftr
+  surfaceFeatureEdges -angle $cfangle $output_filename.stl $output_filename.fms
 #  echo -e "\nCorrecting patch names..\n"
 #  for x in $patch_list
 #  do
 #    to_replace=$(grep $x $output_filename.ftr)
-#    echo -e "$to_replace -> $x" 
+#    echo -e "$to_replace -> $x"
 #    sed -i "s/$to_replace/$x/g" $output_filename.ftr
 #  done
 fi
