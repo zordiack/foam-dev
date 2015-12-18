@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ -f pumpcurve.csv ]
+then
+  echo -e "\nFile pumpcurve.csv found, exiting.\n"
+  exit 1
+else
+  echo -e "\nGenerating file pumpcurve.csv\n"
+  list=$(ls |cut -f1)
+  for i in $list
+  do
+    if [ -d $i ]
+    then
+      cat $i/datapoint.csv >> pumpcurve.csv
+    fi
+  done
+fi
+

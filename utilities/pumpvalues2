@@ -1,0 +1,87 @@
+#!/bin/bash
+#This script calculates turbomachinery related values using OpenFOAM log output.
+#It needs functionObject outputs for pressure area avarage (define inlet- and
+#outletPlane), forces calculation around rotation axis and area normal average of
+#outplet pipe velocity. Other values are defined at the beginning of this file.
+
+endtimes=2000
+density=998.3
+g=9.81
+z=0.3
+rpm=2910
+
+pi=3.14159265359
+omega=$(echo "($rpm / 60)*(2*$pi)"|bc -l)
+
+pressurein=$(cat $1 |grep 'areaAverage(inletPlane)' |cut -d' ' -f9)
+numlines=$(echo "$pressurein"|wc -l)
+pressurein=$(echo "$pressurein"|sed -n "$(($numlines-endtimes+1)),$numlines"p)
+
+pressureout=$(cat $1 |grep 'areaAverage(outletPlane)' |cut -d' ' -f9)
+numlineso=$(echo "$pressureout"|wc -l)
+pressureout=$(echo "$pressureout"|sed -n "$(($numlineso-endtimes+1)),$numlineso"p)
+outletU=$(cat $1 |grep 'areaNormalAverage' |cut -d' ' -f9 |cut -d'(' -f2)
+outletU=$(echo "$outletU"|sed -n "$(($numlines-endtimes+1)),$numlines"p)
+momentv=$(cat $1 |grep 'viscous' |sed -n '1~2!p' |cut -d' ' -f14 |cut -d')' -f1)
+momentv=$(echo "$momentv"|sed -n "$(($numlines-endtimes+1)),$numlines"p)
+momentp=$(cat $1 |grep 'pressure' |sed -n '1~2!p' |cut -d' ' -f13 |cut -d')' -f1)
+momentp=$(echo "$momentp"|sed -n "$(($numlines-endtimes+1)),$numlines"p)
+phi=$(cat slurm.out |grep 'phi'|cut -d' ' -f9|cut -d'-' -f2)
+phi=$(echo "$phi"|sed -n "$(($numlines-endtimes+1)),$numlines"p)
+
+sum=0
+for i in $pressurein
+do
+  sum=$(echo $sum + $i|bc -l)
+done
+averagepin=$(echo $sum / $endtimes|bc -l)
+sum=0
+for i in $pressureout
+do
+  sum=$(echo $sum + $i|bc -l)
+done
+averagepout=$(echo $sum / $endtimes|bc -l)
+sum=0
+for i in $outletU
+do
+  sum=$(echo $sum + $i|bc -l)
+done
+averageU=$(echo $sum / $endtimes|bc -l)
+averagep=$(echo "scale=3;$averagepout+((-1)*$averagepin)"|bc)
+statich=$(echo "scale=3;($averagep / $g) + $z"|bc)
+dynamich=$(echo "scale=3;0.5*($averageU^2) / $g"|bc)
+totalh=$(echo "scale=3;$statich+$dynamich"|bc)
+
+sum=0
+for i in $momentv
+do
+  sum=$(echo $sum + $i|bc -l)
+done
+averageMv=$(echo $sum / $endtimes|bc -l)
+sum=0
+for i in $momentp
+do
+  sum=$(echo $sum + $i|bc -l)
+done
+averageMp=$(echo $sum / $endtimes|bc -l)
+sum=0
+for i in $phi
+do
+  sum=$(echo $sum + $i|bc -l)
+done
+averagePhi=$(echo $sum / $endtimes|bc -l)
+averagePhih=$(echo "scale=3;$averagePhi*3600/1"|bc)
+shaftP=$(echo "scale=3;$omega*($averageMv+$averageMp)/1"|bc)
+fluidP=$(echo "scale=3;$density*$g*$totalh*$averagePhi/1"|bc)
+eta=$(echo "scale=3;($fluidP/$shaftP)*100"|bc)
+
+filestring=$averagePhih,$totalh,$statich,$dynamich,$fluidP,$shaftP,$eta,$averageMv,$averageMp,$averagep,$averagepin,$averagepout,$averagePhi
+echo $filestring > datapoint.csv
+
+echo "Volumetric flow rate is $averagePhih m^3/h."
+echo "Static head is $statich m."
+echo "Dynamic head is $dynamich m."
+echo "Total head is $totalh m."
+echo "Fluid power is $fluidP W."
+echo "Shaft power is $shaftP W."
+echo "Hydraulic efficiency is $eta %."

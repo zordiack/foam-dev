@@ -1,0 +1,112 @@
+#!/bin/bash
+
+# Processes individual ascii stl-files into a single stl-file and optionally
+# extract feature edges for cfMesh.
+# v0.2 by zordiack
+
+function show_help {
+  echo -e "\nOptions:\n\n  -n = output name (without file extension)
+  -cfEdges = write cfMesh feature edges (.fms), requires 
+     angle as an argument
+  -h|--help = show options
+  -check = run surfaceCheck for output file\n
+Examples:\n\n  combineStl -n wholegeometry
+  combineStl -n wholegeometry -cfEdges 20 -check\n"
+}
+
+if [ $# -eq 0 ]
+then
+  echo -e "\nERROR: At least output name must be specified, see -h for help.\n"
+  exit
+fi
+
+while [ "$#" -gt 0 ]; do
+  case $1 in
+    -h|-\?|--help)
+       show_help
+       exit
+       ;;
+    -check)
+       check_surface="yes"
+       shift
+       continue
+       ;;
+    -n)
+       if [ "$#" -gt 1 ]; then
+          output_filename=$2
+          echo -e "\nOutput name is '$output_filename'."
+          shift 2
+          continue
+       else
+       echo -e '\nERROR: Must specify an output name argument for -n, see -h for help.\n'
+       exit 1
+       fi
+       ;;
+    -cfEdges)
+       if [ "$#" -gt 1 ]; then
+          cfangle=$2
+          cfedges="yes"
+          echo -e "\ncfMesf surface feature edge angle is $cfangle."
+          shift 2
+          continue
+       else
+       echo -e '\nERROR: Must specify an angle argument for -cfEdges, see -h for help.\n'
+       exit 1
+       fi
+       ;;       
+    -?*)
+       printf 'ERROR: Unknown option: %s\n' "$1"
+       exit 1
+       ;;
+     *)
+       exit 1
+  esac
+  shift
+done
+
+patchnumber=$(ls *.stl 2> /dev/null |wc -l) 
+if [ $patchnumber -eq 0 ]
+then
+  echo -e "\nERROR: No .stl files found, exiting.\n"
+  exit 1
+fi
+
+echo -e "\nReading patches and writing output to \
+file '$output_filename.stl'.\n\nPatches:\n"
+
+for f in *.stl;
+do
+  patch_name=${f%.*}
+  patch_list="${f%.*} $patch_list"
+  facenumber=$(grep endfacet $f |wc -l)
+  disksize=$(du -h $f |cut -f1)
+  echo "$patch_name ($facenumber faces, size $disksize)"
+  sed -i "s/solid/solid $patch_name/g" $f
+  cat $f >> $output_filename.stl
+done
+
+facenumber=$(grep endfacet $output_filename.stl |wc -l)
+disksize=$(du -h $output_filename.stl |cut -f1)
+echo -e "\nCombined $patchnumber patches, \
+output file has $facenumber faces and file size is $disksize."
+
+if [ "$cfedges" = "yes" ]
+then
+  echo -e "\nRunning surfaceFeatureEdges using angle $cfangle..\n"
+  surfaceFeatureEdges -angle $cfangle $output_filename.stl $output_filename.ftr
+#  echo -e "\nCorrecting patch names..\n"
+#  for x in $patch_list
+#  do
+#    to_replace=$(grep $x $output_filename.ftr)
+#    echo -e "$to_replace -> $x" 
+#    sed -i "s/$to_replace/$x/g" $output_filename.ftr
+#  done
+fi
+
+if [ "$check_surface" = "yes" ]
+then
+  echo -e "\nRunning surfaceCheck for output file..\n"
+  surfaceCheck $output_filename.stl
+fi
+
+echo -e "\ncombineStl done.\n"
