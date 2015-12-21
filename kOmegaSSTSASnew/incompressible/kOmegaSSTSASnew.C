@@ -25,6 +25,8 @@ License
 
 #include "kOmegaSSTSASnew.H"
 
+#include "turbulentTransportModel.H"
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
