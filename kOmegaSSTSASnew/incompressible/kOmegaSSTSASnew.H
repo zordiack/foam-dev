@@ -94,7 +94,7 @@ namespace RASModels
 {
 
 /*---------------------------------------------------------------------------*\
-                     Class kOmegaSSTSAS Declaration
+                       Class kOmegaSSTSASnew Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class BasicTurbulenceModel>
@@ -137,12 +137,12 @@ protected:
         ) const;
 
 
-public:
 
     typedef typename BasicTurbulenceModel::alphaField alphaField;
     typedef typename BasicTurbulenceModel::rhoField rhoField;
     typedef typename BasicTurbulenceModel::transportModel transportModel;
 
+public:
 
     //- Runtime type information
     TypeName("kOmegaSSTSASnew");
