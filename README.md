@@ -19,6 +19,8 @@ To compile kOmegaSSTSASnew run ./Allwmake in folder kOmegaSSTSASnew/.
 wallFunctions folder will hold wall function implementations, starting
 with modified k-omega wall functions by Tobias Knopp et al., based on paper
 
+To compile run wmake in folder wallFunctions.
+
 Knopp, T., Alrutz, T. and Schwamborn, D. (2006)
 "A Grid and flow adaptive wall-function method for RANS turbulence
 modelling"
