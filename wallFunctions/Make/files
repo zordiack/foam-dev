@@ -1,0 +1,4 @@
+nutWallFunctions/nutUKnoppWallFunction/nutUKnoppWallFunctionFvPatchScalarField.C
+omegaWallFunctions/omegaKnoppWallFunction/omegaKnoppWallFunctionFvPatchScalarField.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyturbulenceModels

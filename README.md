@@ -14,7 +14,16 @@ DESider – A European Effort on Hybrid RANS-LES Modelling,
 Notes on Num. Fluid Mech. And Multidisciplinary Design,
 Volume 103, 19-67.
 
-To compile run ./Allwmake.
+To compile kOmegaSSTSASnew run ./Allwmake in folder kOmegaSSTSASnew/.
+
+wallFunctions folder will hold wall function implementations, starting
+with modified k-omega wall functions by Tobias Knopp et al., based on paper
+
+Knopp, T., Alrutz, T. and Schwamborn, D. (2006)
+"A Grid and flow adaptive wall-function method for RANS turbulence
+modelling"
+Journal of Computational Physics,
+Volume 220, 19-40
 
 To use kOmegaSSTSASnew, delta needs to be defined in
 constant/turbulenceProperties:
@@ -37,12 +46,13 @@ RAS
 }
 ```
 ..and the user compiled libs need to be added in system/controlDict
-(choose appropriate version):
+(choose appropriate version), libmyturbulenceModels is for wallFunctions:
 
 ```
 libs
 (
 //    "libmyincompressibleturbulenceModels.so"
     "libmycompressibleturbulenceModels.so"
+    "libmyturbulenceModels.so"
 );
 ```
