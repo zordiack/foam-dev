@@ -93,7 +93,7 @@ tmp<scalarField> nutUKnoppWallFunctionFvPatchScalarField::calcUTau
     {
         scalar ut = sqrt((nutw[faceI] + nuw[faceI])*magGradU[faceI]);
         scalar ut0 = ut;
-        if (ut > SMALL)
+        if (ut > ROOTVSMALL)
         {
             // First calculate log law solution
             int iter = 0;
