@@ -159,7 +159,7 @@ tmp<scalarField> nutUKnoppWallFunctionFvPatchScalarField::calcUTau
             // Finally solution to Spalding's law
             iter = 0;
             err = GREAT;
-            ut = FReim;
+            ut = ut0;
             scalar FSp = 0.0;
 
             do
