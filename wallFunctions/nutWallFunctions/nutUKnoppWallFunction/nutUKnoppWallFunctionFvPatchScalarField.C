@@ -108,7 +108,7 @@ tmp<scalarField> nutUKnoppWallFunctionFvPatchScalarField::calcUTau
 
                 scalar df =                         // df/du_ut
                     y[faceI]/nuw[faceI]
-                  + 1/(kappa_*ut);
+                    + 1/(kappa_*ut);
 
                 scalar uTauNew = ut + f/df;         // Newton iteration
                 err = mag((ut - uTauNew)/ut);
@@ -140,7 +140,7 @@ tmp<scalarField> nutUKnoppWallFunctionFvPatchScalarField::calcUTau
                     + 7.8*((y[faceI]/(nuw[faceI]*11.0))*exp(-y[faceI]*ut/
                     (nuw[faceI]*11.0)) + (y[faceI]/(nuw[faceI]*11.0))*
                     exp(-y[faceI]*ut/(nuw[faceI]*3.0))*
-                   (y[faceI]*ut/(nuw[faceI]*3.0) - 1.0));  // df/d_ut
+                    (y[faceI]*ut/(nuw[faceI]*3.0) - 1.0));  // df/d_ut
 
                 scalar uTauNew = ut + f/df;
                 err = mag((ut - uTauNew)/ut);
@@ -159,7 +159,7 @@ tmp<scalarField> nutUKnoppWallFunctionFvPatchScalarField::calcUTau
             // Finally solution to Spalding's law
             iter = 0;
             err = GREAT;
-            ut = ut0;
+            ut = FReim;
             scalar FSp = 0.0;
 
             do
@@ -174,8 +174,8 @@ tmp<scalarField> nutUKnoppWallFunctionFvPatchScalarField::calcUTau
 
                 scalar df =
                     y[faceI]/nuw[faceI]
-                  + magUp[faceI]/sqr(ut)
-                  + 1/E_*kUu*fkUu/ut;
+                    + magUp[faceI]/sqr(ut)
+                    + 1/E_*kUu*fkUu/ut;
 
                 scalar uTauNew = ut + f/df;
                 err = mag((ut - uTauNew)/ut);
