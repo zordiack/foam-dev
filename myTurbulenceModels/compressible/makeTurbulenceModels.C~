@@ -13,8 +13,8 @@ typedef RASModel<EddyDiffusivity<fluidThermoCompressibleTurbulenceModel> >
 
 }
 
-
-#include "kOmegaSSTSASnew.H"
+#include "../turbulenceModels/RAS/kOmegaSSTSASnew/kOmegaSSTSASnew.H"
+//#include "kOmegaSSTSASnew.H"
 makeTemplatedTurbulenceModel
 (
     fluidThermoCompressibleTurbulenceModel,
