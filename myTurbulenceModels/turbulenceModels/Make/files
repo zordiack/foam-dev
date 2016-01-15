@@ -1,0 +1,11 @@
+/* Wall function BCs */
+wallFunctions = derivedFvPatchFields/wallFunctions
+
+nutWallFunctions = $(wallFunctions)/nutWallFunctions
+
+$(nutWallFunctions)/nutUKnoppWallFunction/nutUKnoppWallFunctionFvPatchScalarField.C
+
+omegaWallFunctions = $(wallFunctions)/omegaWallFunctions
+$(omegaWallFunctions)/omegaKnoppWallFunction/omegaKnoppWallFunctionFvPatchScalarField.C
+
+LIB = $(FOAM_USER_LIBBIN)/libmyturbulenceModels
