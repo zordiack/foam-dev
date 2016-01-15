@@ -13,7 +13,8 @@ namespace Foam
         RAStransportModelIncompressibleTurbulenceModel;
 }
 
-#include "kOmegaSSTSASnew.H"
+//#include "kOmegaSSTSASnew.H"
+#include "../turbulenceModels/RAS/kOmegaSSTSASnew/kOmegaSSTSASnew.H"
 makeTemplatedTurbulenceModel
 (
     transportModelIncompressibleTurbulenceModel,
