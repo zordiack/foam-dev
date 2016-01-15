@@ -6,6 +6,7 @@ targetType=libso
 . $WM_PROJECT_DIR/wmake/scripts/AllwmakeParseArguments
 set -x
 
+wmake $targetType turbulenceModels
 wmake $targetType incompressible
 wmake $targetType compressible
 
