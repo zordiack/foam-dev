@@ -32,6 +32,11 @@ run ./Allwmake in folder myTurbulenceModels/.
 
 To compile chtMultiRegionFoamVH, run ./Allwmake in folder mySolvers/.
 
+To use chtMultiRegionFoamVH solver, the following needs to be added into file
+fvSchemes of the fluid regions:
+
+   div(((((rho*nut)+thermo:mu)*(grad(U)+grad(U).T()))&U)) Gauss linear;
+
 To use kOmegaSSTSASnew, delta needs to be defined in
 constant/turbulenceProperties:
 
