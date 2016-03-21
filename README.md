@@ -23,8 +23,14 @@ modelling"
 Journal of Computational Physics,
 Volume 220, 19-40
 
+A version of chtMultiRegionFoam (and -SimpleFoam) including viscous heating
+has been added. The new solvers are called chtMultiRegionFoamVH and
+chtMultiRegionSimpleFoamVH.
+
 To compile turbulence models and wall functions,
 run ./Allwmake in folder myTurbulenceModels/.
+
+To compile chtMultiRegionFoamVH, run ./Allwmake in folder mySolvers/.
 
 To use kOmegaSSTSASnew, delta needs to be defined in
 constant/turbulenceProperties:
