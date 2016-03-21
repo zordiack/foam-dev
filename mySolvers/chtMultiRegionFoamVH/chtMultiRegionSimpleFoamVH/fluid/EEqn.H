@@ -1,7 +1,7 @@
 {
     volScalarField& he = thermo.he();
     volTensorField gradU = fvc::grad(U);
-    // tau = 2*nu*D, D = deformation rate tensor
+    // tau = 2*mu*D, D = deformation rate tensor
     volTensorField tau = turb.muEff() * (gradU + gradU.T());
 
     fvScalarMatrix EEqn
