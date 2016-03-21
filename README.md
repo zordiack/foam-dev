@@ -24,7 +24,7 @@ Journal of Computational Physics,
 Volume 220, 19-40
 
 A version of chtMultiRegionFoam (and -SimpleFoam) including viscous heating
-has been added. The new solvers are called chtMultiRegionFoamVH and
+have been added. The new solvers are called chtMultiRegionFoamVH and
 chtMultiRegionSimpleFoamVH.
 
 To compile turbulence models and wall functions,
