@@ -74,9 +74,9 @@ void omegaKnoppWallFunctionFvPatchScalarField::setMaster()
     }
 
     const volScalarField& omega =
-        static_cast<const volScalarField&>(this->dimensionedInternalField());
+        static_cast<const volScalarField&>(this->internalField());
 
-    const volScalarField::GeometricBoundaryField& bf = omega.boundaryField();
+    const volScalarField::Boundary& bf = omega.boundaryField();
 
     label master = -1;
     forAll(bf, patchi)
@@ -99,9 +99,9 @@ void omegaKnoppWallFunctionFvPatchScalarField::setMaster()
 void omegaKnoppWallFunctionFvPatchScalarField::createAveragingWeights()
 {
     const volScalarField& omega =
-        static_cast<const volScalarField&>(this->dimensionedInternalField());
+        static_cast<const volScalarField&>(this->internalField());
 
-    const volScalarField::GeometricBoundaryField& bf = omega.boundaryField();
+    const volScalarField::Boundary& bf = omega.boundaryField();
 
     const fvMesh& mesh = omega.mesh();
 
@@ -149,8 +149,8 @@ void omegaKnoppWallFunctionFvPatchScalarField::createAveragingWeights()
         cornerWeights_[patchi] = 1.0/wf.patchInternalField();
     }
 
-    G_.setSize(dimensionedInternalField().size(), 0.0);
-    omega_.setSize(dimensionedInternalField().size(), 0.0);
+    G_.setSize(internalField().size(), 0.0);
+    omega_.setSize(internalField().size(), 0.0);
 
     initialised_ = true;
 }
@@ -160,9 +160,9 @@ omegaKnoppWallFunctionFvPatchScalarField&
 omegaKnoppWallFunctionFvPatchScalarField::omegaPatch(const label patchi)
 {
     const volScalarField& omega =
-        static_cast<const volScalarField&>(this->dimensionedInternalField());
+        static_cast<const volScalarField&>(this->internalField());
 
-    const volScalarField::GeometricBoundaryField& bf = omega.boundaryField();
+    const volScalarField::Boundary& bf = omega.boundaryField();
 
     const omegaKnoppWallFunctionFvPatchScalarField& opf =
         refCast<const omegaKnoppWallFunctionFvPatchScalarField>(bf[patchi]);
@@ -426,7 +426,7 @@ void omegaKnoppWallFunctionFvPatchScalarField::updateCoeffs()
         IOobject::groupName
         (
             turbulenceModel::propertiesName,
-            dimensionedInternalField().group()
+            internalField().group()
         )
     );
 
@@ -449,7 +449,7 @@ void omegaKnoppWallFunctionFvPatchScalarField::updateCoeffs()
             db().lookupObject<FieldType>(turbModel.GName())
         );
 
-    FieldType& omega = const_cast<FieldType&>(dimensionedInternalField());
+    FieldType& omega = const_cast<FieldType&>(internalField());
 
     forAll(*this, faceI)
     {
@@ -478,7 +478,7 @@ void omegaKnoppWallFunctionFvPatchScalarField::updateCoeffs
         IOobject::groupName
         (
             turbulenceModel::propertiesName,
-            dimensionedInternalField().group()
+            internalField().group()
         )
     );
 
@@ -501,7 +501,7 @@ void omegaKnoppWallFunctionFvPatchScalarField::updateCoeffs
             db().lookupObject<FieldType>(turbModel.GName())
         );
 
-    FieldType& omega = const_cast<FieldType&>(dimensionedInternalField());
+    FieldType& omega = const_cast<FieldType&>(internalField());
 
     scalarField& omegaf = *this;
 
@@ -556,7 +556,7 @@ void omegaKnoppWallFunctionFvPatchScalarField::manipulateMatrix
     const labelUList& faceCells = patch().faceCells();
 
     const DimensionedField<scalar, volMesh>& omega
-        = dimensionedInternalField();
+        = internalField();
 
     label nConstrainedCells = 0;
 
